@@ -143,28 +143,35 @@ export class Orderbook {
         };
     }
 
-  
     getDepth() {
         const bids: [string, string][] = [];
         const asks: [string, string][] = [];
 
-        const bidsObj: {[key: string]: number} = {};
-        const asksObj: {[key: string]: number} = {};
+        const bidsObj: { [key: string]: number } = {};
+        const asksObj: { [key: string]: number } = {};
 
         for (let i = 0; i < this.bids.length; i++) {
             const order = this.bids[i];
+            const remainingQty = order.quantity - (order.filled || 0); 
+
+            if (remainingQty <= 0) continue; 
+
             if (!bidsObj[order.price]) {
                 bidsObj[order.price] = 0;
             }
-            bidsObj[order.price] += order.quantity;
+            bidsObj[order.price] += remainingQty;
         }
 
         for (let i = 0; i < this.asks.length; i++) {
             const order = this.asks[i];
+            const remainingQty = order.quantity - (order.filled || 0); 
+
+            if (remainingQty <= 0) continue;
+
             if (!asksObj[order.price]) {
                 asksObj[order.price] = 0;
             }
-            asksObj[order.price] += order.quantity;
+            asksObj[order.price] += remainingQty;
         }
 
         for (const price in bidsObj) {
@@ -180,6 +187,7 @@ export class Orderbook {
             asks
         };
     }
+
 
     getOpenOrders(userId: string): Order[] {
         const asks = this.asks.filter(x => x.userId === userId);

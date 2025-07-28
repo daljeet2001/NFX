@@ -305,7 +305,7 @@ export class Engine {
         if (side === "sell") {
            const updatedBids = depth?.bids.filter(x => fills.map(f => f.price).includes(x[0].toString()));
            const updatedAsk = depth?.asks.find(x => x[0] === price);
-           console.log("publish ws depth updates")
+           console.log("publish ws depth updates",updatedBids,updatedAsk)
            RedisManager.getInstance().publishMessage(`depth@${market}`, {
                stream: `depth@${market}`,
                data: {

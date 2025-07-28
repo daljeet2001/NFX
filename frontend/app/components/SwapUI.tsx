@@ -1,11 +1,32 @@
 "use client";
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import axios from 'axios';
 
 export function SwapUI({ market }: {market: string}) {
+   
     const [amount, setAmount] = useState('134.38');
     const [secondValue, setSecondValue] = useState("123");
     const [activeTab, setActiveTab] = useState('buy');
     const [type, setType] = useState('limit');
+
+ 
+    const placeOrder = async () => {
+      try {
+        const response = await axios.post("http://localhost:3000/api/v1/order", {
+          market:'TATA_INR',
+          quantity: secondValue,
+          price:amount,
+          side:activeTab,
+          userId:"2"
+        });
+
+        console.log("Order placed successfully:", response.data);
+      } catch (error) {
+        console.error("Error placing order:", error);
+      }
+    };
+
+
 
     return <div>
         <div className="flex flex-col">
@@ -44,13 +65,13 @@ export function SwapUI({ market }: {market: string}) {
 
                                 <div className="flex flex-row absolute right-1 top-1 p-2">
                                     <div className="relative">
-                                        <img src="/usdc.webp" className="w-6 h-6" />
+                                        {/* <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFCtp5cUlZDdQebesDrLhaJtI27HmuzK4JiQ&s" className="w-6 h-6" /> */}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2 mt-1">
                         <p className="text-xs font-normal text-baseTextMedEmphasis">
                             Quantity
                         </p>
@@ -65,7 +86,7 @@ export function SwapUI({ market }: {market: string}) {
                             />
                             <div className="flex flex-row absolute right-1 top-1 p-2">
                                 <div className="relative">
-                                    <img src="/sol.webp" className="w-6 h-6" />
+                                    {/* <img src="https://images.seeklogo.com/logo-png/13/2/tata-logo-png_seeklogo-135877.png" className="w-6 h-6" /> */}
                                 </div>
                             </div>
                         </div>
@@ -89,6 +110,7 @@ export function SwapUI({ market }: {market: string}) {
                     </div>
                    <button
                     type="button"
+                    onClick={placeOrder}
                     className={`font-semibold focus:ring-blue-200 focus:outline-none text-center h-12 rounded-xl text-base px-4 py-2 my-4 active:scale-98 ${
                         activeTab === "buy"
                         ? "bg-green-500 text-white"
@@ -99,7 +121,7 @@ export function SwapUI({ market }: {market: string}) {
                     </button>
 
 
-                    <div className="flex justify-between flex-row mt-1">
+                    {/* <div className="flex justify-between flex-row mt-1">
                         <div className="flex flex-row gap-2">
                             <div className="flex items-center">
                                 <input className="form-checkbox rounded border border-solid border-baseBorderMed bg-base-950 font-light text-transparent shadow-none shadow-transparent outline-none ring-0 ring-transparent checked:border-baseBorderMed checked:bg-base-900 checked:hover:border-baseBorderMed focus:bg-base-900 focus:ring-0 focus:ring-offset-0 focus:checked:border-baseBorderMed cursor-pointer h-5 w-5" id="postOnly" type="checkbox" data-rac="" />
@@ -110,7 +132,7 @@ export function SwapUI({ market }: {market: string}) {
                                 <label className="ml-2 text-xs">IOC</label>
                             </div>
                         </div>
-                </div>
+                </div> */}
             </div>
         </div>
     </div>
@@ -144,7 +166,7 @@ function BuyButton({ activeTab, setActiveTab }: { activeTab: string; setActiveTa
       }`}
       onClick={() => setActiveTab("buy")}
     >
-      <p className={`text-center text-sm font-semibold ${isActive ? "text-green-600" : "text-gray-500"}`}>
+      <p className={`text-center text-sm font-semibold ${isActive ? "text-green-500" : "text-gray-500"}`}>
         Buy
       </p>
     </div>
@@ -162,7 +184,7 @@ function SellButton({ activeTab, setActiveTab }: { activeTab: string; setActiveT
       }`}
       onClick={() => setActiveTab("sell")}
     >
-      <p className={`text-center text-sm font-semibold ${isActive ? "text-red-600" : "text-gray-500"}`}>
+      <p className={`text-center text-sm font-semibold ${isActive ? "text-red-500" : "text-gray-500"}`}>
         Sell
       </p>
     </div>

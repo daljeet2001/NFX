@@ -6,10 +6,12 @@ import { getTickers } from "../utils/httpClient";
 import { useRouter } from "next/navigation";
 
 export const Markets = () => {
-  const [tickers, setTickers] = useState<Ticker[]>();
+const [tickers, setTickers] = useState<Ticker[]>(); 
+
 
   useEffect(() => {
-    getTickers().then((m) => setTickers(m));
+  getTickers().then((m) => setTickers(m));
+    
   }, []);
 
   return (
@@ -18,7 +20,9 @@ export const Markets = () => {
         <div className="flex flex-col w-full rounded-lg bg-baseBackgroundL1 px-5 py-3">
           <table className="w-full table-auto">
             <MarketHeader />
-            {tickers?.map((m) => <MarketRow market={m} />)}
+            <tbody>
+            {tickers?.map((m) => <MarketRow key={m.symbol} market={m} />)}
+            </tbody>
           </table>
         </div>
       </div>
@@ -40,7 +44,7 @@ function MarketRow({ market }: { market: Ticker }) {
               <div className="relative">
                 <img
                   alt={market.symbol}
-                  src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVvBqZC_Q1TSYObZaMvK0DRFeHZDUtVMh08Q&s"}
+                  src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAkx6l7_33DOWaOeO6evirSAaaqq2jM4G59Q&s"}
                   loading="lazy"
                   width="40"
                   height="40"
