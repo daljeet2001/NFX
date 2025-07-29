@@ -15,7 +15,8 @@ export async function getTicker(market: string): Promise<Ticker> {
 }
 
 export async function getTickers(): Promise<Ticker[]> {
-    const response = await axios.get(`${BASE_URL}/tickers`);
+    const response = await axios.get(`${BASE_URL}/klines/ticker`);
+    console.log("response from utils",response)
     return response.data;
 }
 

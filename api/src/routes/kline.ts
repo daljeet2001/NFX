@@ -85,3 +85,20 @@ klineRouter.get("/trades", async (req, res) => {
   console.log("[GET /trades] Request handled completely");
 });
 
+klineRouter.get("/ticker", async (req, res) => {
+  console.log("[GET /ticker] Request received");
+
+  try {
+    const result = await pgClient.query("SELECT * FROM tickers LIMIT 1");
+    console.log("[GET /ticker] Query result:", result.rows);
+
+    res.status(200).json(result.rows); // Send raw rows
+  } catch (err) {
+    console.error("[GET /ticker] Error occurred:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
+
+

@@ -26,6 +26,7 @@ async function main() {
                 console.log("adding data");
                 console.log(data);
                 const price = data.data.price;
+                const market=data.data.market;
                 const timestamp = new Date(data.data.timestamp);
                 const query = 'INSERT INTO tata_prices (time, price) VALUES ($1, $2)';
                 const values = [timestamp, price];
@@ -40,6 +41,15 @@ async function main() {
 
                 const tradeValues = [data.data.id, data.data.market, data.data.isBuyerMaker, price, data.data.quantity, data.data.quoteQuantity, new Date(timestamp)];
                 await pgClient.query(tradeQuery, tradeValues);
+
+                const updateTickerQuery = `
+                UPDATE tickers
+                SET first_price = $1,
+                    last_price = $1,
+                    updated_at = NOW()
+                WHERE symbol = $2
+            `;
+             await pgClient.query(updateTickerQuery, [price, market]);
             }
             else if (data.type === "ORDER_UPDATE") {
             console.log("updating data");

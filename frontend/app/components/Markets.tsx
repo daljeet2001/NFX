@@ -68,7 +68,7 @@ function MarketRow({ market }: { market: Ticker }) {
         </div>
       </td>
       <td className="px-1 py-3">
-        <p className="text-base font-medium tabular-nums">{market.lastPrice}</p>
+        <p className="text-base font-medium tabular-nums">{market.first_price}</p>
       </td>
       <td className="px-1 py-3">
         <p className="text-base font-medium tabular-nums">{market.high}</p>
@@ -78,7 +78,7 @@ function MarketRow({ market }: { market: Ticker }) {
       </td>
       <td className="px-1 py-3">
         <p className="text-base font-medium tabular-nums text-greenText">
-          {Number(market.priceChangePercent)?.toFixed(3)} %
+          {Number(market.price_change_percent)?.toFixed(3)} %
         </p>
       </td> 
     </tr>

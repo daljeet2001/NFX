@@ -9,26 +9,13 @@ export const MarketBar = ({market}: {market: string}) => {
 
     useEffect(() => {
         getTicker(market).then(setTicker);
-        SignalingManager.getInstance().registerCallback("ticker", (data: Partial<Ticker>)  =>  setTicker(prevTicker => ({
-            firstPrice: data?.firstPrice ?? prevTicker?.firstPrice ?? '',
-            high: data?.high ?? prevTicker?.high ?? '',
-            lastPrice: data?.lastPrice ?? prevTicker?.lastPrice ?? '',
-            low: data?.low ?? prevTicker?.low ?? '',
-            priceChange: data?.priceChange ?? prevTicker?.priceChange ?? '',
-            priceChangePercent: data?.priceChangePercent ?? prevTicker?.priceChangePercent ?? '',
-            quoteVolume: data?.quoteVolume ?? prevTicker?.quoteVolume ?? '',
-            symbol: data?.symbol ?? prevTicker?.symbol ?? '',
-            trades: data?.trades ?? prevTicker?.trades ?? '',
-            volume: data?.volume ?? prevTicker?.volume ?? '',
-        })), `TICKER-${market}`);
-        SignalingManager.getInstance().sendMessage({"method":"SUBSCRIBE","params":[`ticker.${market}`]}	);
+      
 
         return () => {
-            SignalingManager.getInstance().deRegisterCallback("ticker", `TICKER-${market}`);
-            SignalingManager.getInstance().sendMessage({"method":"UNSUBSCRIBE","params":[`ticker.${market}`]}	);
+
         }
     }, [market])
-    // 
+    
 
     return <div>
         <div className="flex items-center flex-row relative w-full overflow-hidden border-b border-slate-800">
@@ -36,12 +23,12 @@ export const MarketBar = ({market}: {market: string}) => {
                     <Ticker market={market} />
                     <div className="flex items-center flex-row space-x-8 pl-4">
                         <div className="flex flex-col h-full justify-center">
-                            <p className={`font-medium tabular-nums  text-md text-green-500`}>${ticker?.lastPrice}</p>
-                            <p className="font-medium text-sm text-sm tabular-nums">${ticker?.lastPrice}</p>
+                            <p className={`font-medium tabular-nums  text-md text-green-500`}>₹{ticker?.last_price}</p>
+                            <p className="font-medium text-sm text-sm tabular-nums">₹{ticker?.last_price}</p>
                         </div>
                         <div className="flex flex-col">
                             <p className={`font-medium text-xs text-slate-400 text-sm`}>24H Change</p>
-                            <p className={` text-sm font-medium tabular-nums leading-5 text-sm text-greenText ${Number(ticker?.priceChange) > 0 ? "text-green-500" : "text-red-500"}`}>{Number(ticker?.priceChange) > 0 ? "+" : ""} {ticker?.priceChange} {Number(ticker?.priceChangePercent)?.toFixed(2)}%</p></div><div className="flex flex-col">
+                            <p className={` text-sm font-medium tabular-nums leading-5 text-sm text-greenText ${Number(ticker?.price_change) > 0 ? "text-green-500" : "text-red-500"}`}>{Number(ticker?.price_change) > 0 ? "+" : ""} {ticker?.price_change} {Number(ticker?.price_change_percent)?.toFixed(2)}%</p></div><div className="flex flex-col">
                                 <p className="font-medium text-xs text-slate-400 text-sm">24H High</p>
                                 <p className="text-sm font-medium tabular-nums leading-5 text-sm ">{ticker?.high}</p>
                                 </div>

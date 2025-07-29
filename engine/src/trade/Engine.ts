@@ -32,6 +32,7 @@ export class Engine {
             const snapshotSnapshot = JSON.parse(snapshot.toString());
             this.orderbooks = snapshotSnapshot.orderbooks.map((o: any) => new Orderbook(o.baseAsset, o.bids, o.asks, o.lastTradeId, o.currentPrice));
             this.balances = new Map(snapshotSnapshot.balances);
+            console.log("balances",this.balances);
         } else {
             this.orderbooks = [new Orderbook(`TATA`, [], [], 0, 0)];
             this.setBaseBalances();
@@ -416,11 +417,11 @@ export class Engine {
     setBaseBalances() {
         this.balances.set("7837484", {
             [BASE_CURRENCY]: {
-                available: 10000000,
+                available: 10000000000,
                 locked: 0
             },
             "TATA": {
-                available: 10000000,
+                available: 100000000000,
                 locked: 0
             }
         });

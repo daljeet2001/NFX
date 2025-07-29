@@ -27,16 +27,17 @@ export interface Depth {
 }
 
 export interface Ticker {
-    "firstPrice": string,
+    "first_price": string,
     "high": string,
-    "lastPrice": string,
+    "last_price": string,
     "low": string,
-    "priceChange": string,
-    "priceChangePercent": string,
-    "quoteVolume": string,
+    "price_change": string,
+    "price_change_percent": string,
+    "quote_volume": string,
     "symbol": string,
     "trades": string,
-    "volume": string
+    "volume": string,
+    "updated_at":number
 }
 export interface Order {
     "orderId":string,

@@ -102,6 +102,52 @@ await client.query(`
   );
 `);
 
+await client.query(`
+  DROP TABLE IF EXISTS tickers;
+
+  CREATE TABLE tickers (
+    symbol TEXT PRIMARY KEY,
+    first_price NUMERIC,
+    high NUMERIC,
+    last_price NUMERIC,
+    low NUMERIC,
+    price_change NUMERIC,
+    price_change_percent NUMERIC,
+    quote_volume NUMERIC,
+    volume NUMERIC,
+    trades INTEGER,
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+  );
+`);
+
+await client.query(`
+  INSERT INTO tickers (
+    symbol,
+    first_price,
+    high,
+    last_price,
+    low,
+    price_change,
+    price_change_percent,
+    quote_volume,
+    volume,
+    trades
+  ) VALUES (
+    'TATA_INR',
+    100.00,
+    120.00,
+    115.50,
+    98.75,
+    15.50,
+    15.50,
+    1500000,
+    10000,
+    12000
+  );
+`);
+
+
+
 
 
 
