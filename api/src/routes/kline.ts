@@ -50,3 +50,38 @@ klineRouter.get("/", async (req, res) => {
         res.status(500).send(err);
     }
 });
+
+klineRouter.get("/orders", async (req, res) => {
+  console.log("[GET /orders] Request received");
+
+  try {
+    console.log("[GET /orders] Executing query...");
+    const result = await pgClient.query("SELECT * FROM orders ORDER BY timestamp DESC");
+    console.log("[GET /orders] Query result:", result.rows);
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error("[GET /orders] Error occurred:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+
+  console.log("[GET /orders] Request handled completely");
+});
+
+klineRouter.get("/trades", async (req, res) => {
+  console.log("[GET /trades] Request received");
+
+  try {
+    console.log("[GET /trades] Executing query...");
+    const result = await pgClient.query("SELECT * FROM trades ORDER BY timestamp DESC");
+    console.log("[GET /trades] Query result:", result.rows);
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error("[GET /trades] Error occurred:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+
+  console.log("[GET /trades] Request handled completely");
+});
+

@@ -1,6 +1,6 @@
 import { DEPTH_UPDATE, TICKER_UPDATE } from "./trade/events";
 import { RedisClientType, createClient } from "redis";
-import { ORDER_UPDATE, TRADE_ADDED } from "./types";
+import { ORDER_UPDATE, TRADE_ADDED,NEW_ORDER } from "./types";
 import { WsMessage } from "./types/toWs";
 import { MessageToApi } from "./types/toApi";
 
@@ -23,6 +23,16 @@ type DbMessage = {
         market?: string,
         price?: string,
         quantity?: string,
+        side?: "buy" | "sell",
+    }
+} | {
+    type: typeof NEW_ORDER,
+    data: {
+        orderId: string,
+        userId: string,
+        price?: string,
+        quantity?: string,
+        filled?: string,
         side?: "buy" | "sell",
     }
 }

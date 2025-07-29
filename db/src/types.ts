@@ -19,4 +19,14 @@ export type DbMessage = {
         quantity?: string,
         side?: "buy" | "sell",
     }
+} | {
+    type: "NEW_ORDER",
+    data: {
+        orderId: string,
+        userId: string,
+        price?: string,
+        quantity?: string,
+        filled?: string,
+        side?: "buy" | "sell",
+    }
 }

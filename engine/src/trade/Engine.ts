@@ -1,6 +1,6 @@
 import fs from "fs";
 import { RedisManager } from "../RedisManager";
-import { ORDER_UPDATE, TRADE_ADDED } from "../types/index";
+import { ORDER_UPDATE, TRADE_ADDED,NEW_ORDER } from "../types/index";
 import { CANCEL_ORDER, CREATE_ORDER, GET_DEPTH, GET_OPEN_ORDERS, MessageFromApi, ON_RAMP } from "../types/fromApi";
 import { Fill, Order, Orderbook } from "./Orderbook";
 
@@ -196,6 +196,24 @@ export class Engine {
             side,
             userId
         }
+
+        //store orders in DB
+
+        RedisManager.getInstance().pushMessage({
+            type: NEW_ORDER,
+            data:{
+                orderId:order.orderId,
+                userId:order.userId,
+                price:order.price.toString(),
+                quantity:order.quantity.toString(),
+                filled:order.filled.toString(),
+                side:order.side
+                }                 
+    });
+
+    
+
+        
         
         const { fills, executedQty } = orderbook.addOrder(order);
         this.updateBalance(userId, baseAsset, quoteAsset, side, fills, executedQty);
@@ -234,7 +252,7 @@ export class Engine {
     createDbTrades(fills: Fill[], market: string, userId: string) {
         fills.forEach(fill => {
             RedisManager.getInstance().pushMessage({
-                type: TRADE_ADDED,
+                type: TRADE_ADDED,  //store this as trades in db
                 data: {
                     market: market,
                     id: fill.tradeId.toString(),
@@ -242,7 +260,8 @@ export class Engine {
                     price: fill.price,
                     quantity: fill.qty.toString(),
                     quoteQuantity: (fill.qty * Number(fill.price)).toString(),
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                   
                 }
             });
         });
@@ -283,7 +302,7 @@ export class Engine {
         });
     }
 
-    publisWsDepthUpdates(fills: Fill[], price: string, side: "buy" | "sell", market: string) { //somehow i am not seeing the updated bid and ask on frontend
+    publisWsDepthUpdates(fills: Fill[], price: string, side: "buy" | "sell", market: string) {
         const orderbook = this.orderbooks.find(o => o.ticker() === market);
         if (!orderbook) {
             return;
@@ -395,7 +414,7 @@ export class Engine {
     }
 
     setBaseBalances() {
-        this.balances.set("1", {
+        this.balances.set("7837484", {
             [BASE_CURRENCY]: {
                 available: 10000000,
                 locked: 0
@@ -406,7 +425,7 @@ export class Engine {
             }
         });
 
-        this.balances.set("2", {
+        this.balances.set("9393791", {
             [BASE_CURRENCY]: {
                 available: 10000000,
                 locked: 0
@@ -417,7 +436,7 @@ export class Engine {
             }
         });
 
-        this.balances.set("5", {
+        this.balances.set("5278798", {
             [BASE_CURRENCY]: {
                 available: 10000000,
                 locked: 0

@@ -20,6 +20,12 @@ export const Appbar = () => {
                 <div className={`text-sm pt-1 flex flex-col justify-center pl-8 cursor-pointer ${route.startsWith('/trade') ? 'text-white' : 'text-slate-500'}`} onClick={() => router.push('/trade/TATA_INR')}>
                     Trade
                 </div>
+                <div className={`text-sm pt-1 flex flex-col justify-center pl-8 cursor-pointer ${route.startsWith('/orders') ? 'text-white' : 'text-slate-500'}`} onClick={() => router.push('/orders')}>
+                    Orders
+                </div>
+                <div className={`text-sm pt-1 flex flex-col justify-center pl-8 cursor-pointer ${route.startsWith('/trades') ? 'text-white' : 'text-slate-500'}`} onClick={() => router.push('/trades')}>
+                    Trades
+                </div>
             </div>
             <div className="flex">
                 <div className="p-2 mr-2">

@@ -17,7 +17,7 @@ export function SwapUI({ market }: {market: string}) {
           quantity: secondValue,
           price:amount,
           side:activeTab,
-          userId:"2"
+          userId:"5278798"
         });
 
         console.log("Order placed successfully:", response.data);
@@ -46,7 +46,7 @@ export function SwapUI({ market }: {market: string}) {
                         <div className="flex flex-col gap-3">
                             <div className="flex items-center justify-between flex-row">
                                 <p className="text-xs font-normal text-baseTextMedEmphasis">Available Balance</p>
-                                <p className="font-medium text-xs text-baseTextHighEmphasis">36.94 USDC</p>
+                                <p className="font-medium text-xs text-baseTextHighEmphasis">10000000 INR</p>
                             </div>
                         </div>
                         <div className="flex flex-col gap-2">
@@ -90,10 +90,10 @@ export function SwapUI({ market }: {market: string}) {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex justify-end flex-row">
+                        {/* <div className="flex justify-end flex-row">
                             <p className="font-medium pr-2 text-xs text-baseTextMedEmphasis">≈ 0.00 USDC</p>
-                        </div>
-                        <div className="flex justify-center flex-row mt-2 gap-3">
+                        </div> */}
+                        {/* <div className="flex justify-center flex-row mt-2 gap-3">
                             <div className="flex items-center justify-center flex-row rounded-full px-[16px] py-[6px] text-xs cursor-pointer bg-baseBackgroundL2 hover:bg-baseBackgroundL3">
                                 25%
                             </div>
@@ -106,7 +106,7 @@ export function SwapUI({ market }: {market: string}) {
                             <div className="flex items-center justify-center flex-row rounded-full px-[16px] py-[6px] text-xs cursor-pointer bg-baseBackgroundL2 hover:bg-baseBackgroundL3">
                                 Max
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                    <button
                     type="button"

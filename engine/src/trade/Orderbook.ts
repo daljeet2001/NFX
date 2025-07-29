@@ -29,7 +29,7 @@ export class Orderbook {
         this.bids = bids;
         this.asks = asks;
         this.baseAsset = baseAsset;
-        this.lastTradeId = lastTradeId || 0;
+        this.lastTradeId = lastTradeId || 1657383;
         this.currentPrice = currentPrice ||0;
     }
 
