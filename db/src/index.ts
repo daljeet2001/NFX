@@ -1,20 +1,25 @@
+import 'dotenv/config'; 
 import { Client } from 'pg';
 import { createClient } from 'redis';  
 import { DbMessage } from './types';
 
 const pgClient = new Client({
-    user: 'your_user',
-    host: 'localhost',
-    database: 'my_database',
-    password: 'your_password',
-    port: 5432,
+  connectionString: process.env.DATABASE_URL,
+    ssl: {
+    rejectUnauthorized: false
+  }
 });
 pgClient.connect();
 
 async function main() {
-    const redisClient = createClient();
-    await redisClient.connect();
-    console.log("connected to redis");
+  const redisClient = createClient({
+  url: process.env.REDIS_URL,
+  });
+
+  redisClient.on('error', (err) => console.error('Redis error:', err));
+
+await redisClient.connect();
+console.log("✅ Connected to Upstash Redis");
 
     while (true) {
         const response = await redisClient.rPop("db_processor" as string)

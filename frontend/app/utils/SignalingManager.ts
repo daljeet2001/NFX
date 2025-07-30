@@ -41,11 +41,11 @@ export class SignalingManager {
                 this.callbacks[type].forEach(({ callback }) => {
                     if (type === "ticker") {
                         const newTicker: Partial<Ticker> = {
-                            lastPrice: message.data.c,
+                            last_price: message.data.c,
                             high: message.data.h,
                             low: message.data.l,
                             volume: message.data.v,
-                            quoteVolume: message.data.V,
+                            quote_volume: message.data.V,
                             symbol: message.data.s,
                         }
                         console.log(newTicker);

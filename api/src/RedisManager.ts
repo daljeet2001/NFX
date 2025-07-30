@@ -1,4 +1,3 @@
-
 import { RedisClientType, createClient } from "redis";
 import { MessageFromOrderbook } from "./types";
 import { MessageToEngine } from "./types/to";
@@ -9,9 +8,25 @@ export class RedisManager {
     private static instance: RedisManager;
 
     private constructor() {
-        this.client = createClient();
+        const redisUrl = process.env.REDIS_URL; 
+        if (!redisUrl) {
+            throw new Error("REDIS_URL is not defined in environment variables");
+        }
+
+        this.client = createClient({
+            url: redisUrl,
+            socket: {
+                tls: true,  // Required for Upstash
+            },
+        });
         this.client.connect();
-        this.publisher = createClient();
+
+        this.publisher = createClient({
+            url: redisUrl,
+            socket: {
+                tls: true,
+            },
+        });
         this.publisher.connect();
     }
 
@@ -36,5 +51,4 @@ export class RedisManager {
     public getRandomClientId() {
         return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     }
-
 }
