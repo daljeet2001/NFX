@@ -75,6 +75,28 @@ async function initializeDB() {
         GROUP BY bucket, currency_code;
     `);
 
+  const now = new Date();
+  const insertQueries = [];
+
+  for (let i = 0; i < 60; i++) {
+    const time = new Date(now.getTime() - i * 60 * 1000); // every minute
+    const price = (100 + Math.random() * 20).toFixed(2);   // price between 100–120
+    const volume = (Math.random() * 5).toFixed(2);         // volume between 0–5
+
+    insertQueries.push(`(
+      '${time.toISOString()}',
+      ${price},
+      ${volume},
+      'TATA_INR'
+    )`);
+  }
+
+  await client.query(`
+    INSERT INTO tata_prices (time, price, volume, currency_code)
+    VALUES ${insertQueries.join(",")};
+  `);
+
+
     await client.query(`
     DROP TABLE IF EXISTS trades;
     CREATE TABLE trades (
