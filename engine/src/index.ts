@@ -15,38 +15,50 @@ async function main() {
   const redisClient = createClient({
     url: redisUrl,
     socket: {
-      tls: true, // Required for Upstash (set to false for local Redis)
+      tls: true,
     },
   });
 
   redisClient.on("error", (err) => {
     console.error("Redis Client Error:", err);
-    process.exit(1); // fail-fast if Redis goes down
+    process.exit(1);
   });
 
   try {
     await redisClient.connect();
-    console.log("✅ Connected to Upstash Redis");
+    console.log("Connected to Redis");
   } catch (error) {
-    console.error("❌ Redis connection failed:", error);
+    console.error("Redis connection failed:", error);
     process.exit(1);
   }
 
+  const MAX_MESSAGES_PER_TICK = 5;
+
   const pollQueue = async () => {
     try {
-      const response = await redisClient.rPop("messages");
-      if (response) {
-        engine.process(JSON.parse(response));
+      let processed = 0;
+
+      while (processed < MAX_MESSAGES_PER_TICK) {
+        const message = await redisClient.rPop("messages");
+        if (!message) break;
+
+        try {
+          engine.process(JSON.parse(message));
+        } catch (e) {
+          console.error("Error processing message:", e);
+        }
+
+        processed++;
       }
     } catch (err) {
-      console.error("❌ Error during message processing:", err);
+      console.error("Polling error:", err);
     }
 
-    // Short delay to avoid tight infinite loop if queue is empty
-    setTimeout(pollQueue, 50);
+ 
+    setTimeout(pollQueue, 100);
   };
 
-  pollQueue(); // start polling
+  pollQueue();
 }
 
 main();
