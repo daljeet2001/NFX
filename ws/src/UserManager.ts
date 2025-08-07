@@ -21,6 +21,7 @@ export class UserManager {
         const id = this.getRandomId();
         const user = new User(id, ws);
         this.users.set(id, user);
+        console.log('users map in usermanager', this.users);
         this.registerOnClose(ws, id);
         return user;
     }

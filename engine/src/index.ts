@@ -32,33 +32,14 @@ async function main() {
     process.exit(1);
   }
 
-  const MAX_MESSAGES_PER_TICK = 5;
-
-  const pollQueue = async () => {
-    try {
-      let processed = 0;
-
-      while (processed < MAX_MESSAGES_PER_TICK) {
-        const message = await redisClient.rPop("messages");
-        if (!message) break;
-
-        try {
-          engine.process(JSON.parse(message));
-        } catch (e) {
-          console.error("Error processing message:", e);
-        }
-
-        processed++;
-      }
-    } catch (err) {
-      console.error("Polling error:", err);
+  while (true) {
+    const response = await redisClient.rPop("messages");
+    if (response) {
+      engine.process(JSON.parse(response));
     }
+  }
 
- 
-    setTimeout(pollQueue, 100);
-  };
 
-  pollQueue();
 }
 
 main();

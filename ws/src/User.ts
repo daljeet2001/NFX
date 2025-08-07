@@ -30,6 +30,7 @@ export class User {
     private addListeners() {
         this.ws.on("message", (message: string) => {
             const parsedMessage: IncomingMessage = JSON.parse(message);
+            console.log("subscribes from frontend",parsedMessage)
             if (parsedMessage.method === SUBSCRIBE) {
                 parsedMessage.params.forEach(s => SubscriptionManager.getInstance().subscribe(this.id, s));
             }

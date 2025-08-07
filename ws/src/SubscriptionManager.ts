@@ -51,10 +51,14 @@ export class SubscriptionManager {
         if (this.reverseSubscriptions.get(subscription)?.length === 1) {
             this.redisClient.subscribe(subscription, this.redisCallbackHandler);
         }
+      
+        console.log("Current subscriptions:", this.subscriptions);
+        console.log("Current reverse subscriptions:", this.reverseSubscriptions);
     }
 
     private redisCallbackHandler = (message: string, channel: string) => {
         const parsedMessage = JSON.parse(message);
+        console.log(`Received message on channel ${channel}:`, parsedMessage);
         this.reverseSubscriptions
             .get(channel)
             ?.forEach((s) =>

@@ -9,13 +9,27 @@ export const MarketBar = ({market}: {market: string}) => {
 
     useEffect(() => {
         getTicker(market).then(setTicker);
-      
+        SignalingManager.getInstance().registerCallback("ticker", (data: Partial<Ticker>)  =>  setTicker(prevTicker => ({
+            first_price: data?.first_price ?? prevTicker?.first_price ?? '',
+            high: data?.high ?? prevTicker?.high ?? '',
+            last_price: data?.last_price ?? prevTicker?.last_price ?? '',
+            low: data?.low ?? prevTicker?.low ?? '',
+            price_change: data?.price_change ?? prevTicker?.price_change ?? '',
+            price_change_percent: data?.price_change_percent ?? prevTicker?.price_change_percent ?? '',
+            quote_volume: data?.quote_volume ?? prevTicker?.quote_volume ?? '',
+            symbol: data?.symbol ?? prevTicker?.symbol ?? '',
+            trades: data?.trades ?? prevTicker?.trades ?? '',
+            volume: data?.volume ?? prevTicker?.volume ?? '',
+            updated_at: data?.updated_at ?? prevTicker?.updated_at ?? Date.now(),
+        })), `TICKER-${market}`);
+        SignalingManager.getInstance().sendMessage({"method":"SUBSCRIBE","params":[`ticker.${market}`]}	);
 
         return () => {
-
+            SignalingManager.getInstance().deRegisterCallback("ticker", `TICKER-${market}`);
+            SignalingManager.getInstance().sendMessage({"method":"UNSUBSCRIBE","params":[`ticker.${market}`]}	);
         }
     }, [market])
-    
+    // 
 
     return <div>
         <div className="flex items-center flex-row relative w-full overflow-hidden border-b border-slate-800">
@@ -23,7 +37,7 @@ export const MarketBar = ({market}: {market: string}) => {
                     <Ticker market={market} />
                     <div className="flex items-center flex-row space-x-8 pl-4">
                         <div className="flex flex-col h-full justify-center">
-                            <p className={`font-medium tabular-nums  text-md text-green-500`}>₹{ticker?.last_price}</p>
+                            <p className={`font-medium tabular-nums text-greenText text-md text-green-500`}>₹{ticker?.last_price}</p>
                             <p className="font-medium text-sm text-sm tabular-nums">₹{ticker?.last_price}</p>
                         </div>
                         <div className="flex flex-col">

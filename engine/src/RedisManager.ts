@@ -73,6 +73,7 @@ export class RedisManager {
 
   public publishMessage(channel: string, message: WsMessage) {
     this.client.publish(channel, JSON.stringify(message));
+    console.log(`Published message to channel ${channel}:`, message);
   }
 
   public sendToApi(clientId: string, message: MessageToApi) {

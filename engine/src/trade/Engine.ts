@@ -268,6 +268,9 @@ export class Engine {
         });
     }
 
+    //publish wsticker here
+
+    //just subscribe this on the ws
     publishWsTrades(fills: Fill[], userId: string, market: string) {
         fills.forEach(fill => {
             RedisManager.getInstance().publishMessage(`trade@${market}`, {
@@ -279,6 +282,20 @@ export class Engine {
                     p: fill.price,
                     q: fill.qty.toString(),
                     s: market,
+                }
+            });
+
+            RedisManager.getInstance().publishMessage(`ticker.${market}`, {
+                stream: `ticker@${market}`,
+                data: {
+                    e: "ticker",
+                    c: fill.price,
+                    h: fill.price,
+                    l: fill.price,
+                    v: fill.qty.toString(),
+                    V: (fill.qty * Number(fill.price)).toString(),
+                    s: market,
+                    id: fill.tradeId,
                 }
             });
         });
@@ -312,7 +329,7 @@ export class Engine {
         if (side === "buy") {
             const updatedAsks = depth?.asks.filter(x => fills.map(f => f.price).includes(x[0].toString()));
             const updatedBid = depth?.bids.find(x => x[0] === price);
-            console.log("publish ws depth updates")
+            // console.log("publish ws depth updates")
             RedisManager.getInstance().publishMessage(`depth@${market}`, {
                 stream: `depth@${market}`,
                 data: {
@@ -325,7 +342,7 @@ export class Engine {
         if (side === "sell") {
            const updatedBids = depth?.bids.filter(x => fills.map(f => f.price).includes(x[0].toString()));
            const updatedAsk = depth?.asks.find(x => x[0] === price);
-           console.log("publish ws depth updates",updatedBids,updatedAsk)
+        //    console.log("publish ws depth updates",updatedBids,updatedAsk)
            RedisManager.getInstance().publishMessage(`depth@${market}`, {
                stream: `depth@${market}`,
                data: {
