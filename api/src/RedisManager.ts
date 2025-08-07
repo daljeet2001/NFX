@@ -16,9 +16,10 @@ export class RedisManager {
         this.client = createClient({
             url: redisUrl,
             socket: {
-                tls: true,
+                tls: true,  // Required for Upstash
             },
         });
+        this.client.connect();
 
         this.publisher = createClient({
             url: redisUrl,
@@ -26,52 +27,28 @@ export class RedisManager {
                 tls: true,
             },
         });
-
-        // Safe async connection
-        this.client.connect().catch(console.error);
-        this.publisher.connect().catch(console.error);
+        this.publisher.connect();
     }
 
-    public static getInstance(): RedisManager {
-        if (!this.instance) {
+    public static getInstance() {
+        if (!this.instance)  {
             this.instance = new RedisManager();
         }
         return this.instance;
     }
 
-    public sendAndAwait(message: MessageToEngine): Promise<MessageFromOrderbook> {
-        return new Promise<MessageFromOrderbook>((resolve, reject) => {
+    public sendAndAwait(message: MessageToEngine) {
+        return new Promise<MessageFromOrderbook>((resolve) => {
             const id = this.getRandomClientId();
-            let resolved = false;
-
-            const onMessage = (message: string) => {
-                if (resolved) return;
-                resolved = true;
-                clearTimeout(timeout);
-                this.client.unsubscribe(id).catch(console.error);
+            this.client.subscribe(id, (message) => {
+                this.client.unsubscribe(id);
                 resolve(JSON.parse(message));
-            };
-
-            const timeout = setTimeout(() => {
-                if (resolved) return;
-                resolved = true;
-                this.client.unsubscribe(id).catch(console.error);
-                reject(new Error("Redis response timeout"));
-            }, 5000); // 5s timeout
-
-            this.client.subscribe(id, onMessage).then(() => {
-                this.publisher.lPush("messages", JSON.stringify({ clientId: id, message }));
-            }).catch((err) => {
-                clearTimeout(timeout);
-                reject(err);
             });
+            this.publisher.lPush("messages", JSON.stringify({ clientId: id, message }));
         });
     }
 
-    private getRandomClientId(): string {
-        return (
-            Math.random().toString(36).substring(2, 15) +
-            Math.random().toString(36).substring(2, 15)
-        );
+    public getRandomClientId() {
+        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     }
 }
