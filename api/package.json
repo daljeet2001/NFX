@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
 "scripts": {
-  "build": "tsc -b",
+  "build": "NODE_OPTIONS='--max-old-space-size=4096' tsc -b",
   "start": "node --max-old-space-size=4096 dist/index.js",
   "dev": "npm run build && npm run start"
 },
+
 
   "keywords": [],
   "author": "",
