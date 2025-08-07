@@ -14,6 +14,20 @@ export type TickerUpdateMessage = {
     }
 } 
 
+export type TradeUpdateMessage = {
+    type: "trade",
+    data: {
+       data: {
+        e: "trade",
+        t: number,
+        m: boolean,
+        p: string,
+        q: string,
+        s: string, 
+    }
+    }
+} 
+
 export type DepthUpdateMessage = {
     type: "depth",
     data: {
@@ -24,4 +38,4 @@ export type DepthUpdateMessage = {
     }
 }
 
-export type OutgoingMessage = TickerUpdateMessage | DepthUpdateMessage;
+export type OutgoingMessage = TickerUpdateMessage | DepthUpdateMessage | TradeUpdateMessage;
