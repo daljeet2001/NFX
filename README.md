@@ -1,27 +1,4 @@
-# NFX – Exchange Platform
-
-**NFX** is a high-performance exchange built using a microservices architecture. It includes a custom order-matching engine, real-time WebSocket communication, and a modular backend with separate services for API, Engine, Market Maker, WebSockets, and Database.
-
 ![NFX UI Screenshot](./assets/design.png)
-
----
-
-## 🏗 Architecture Overview
-
----
-
-## 🔧 Services
-
-| Service        | Description                          | Tech Stack                        |
-|----------------|--------------------------------------|-----------------------------------|
-| **Frontend**   | User-facing interface                | Next.js, Tailwind CSS      |
-| **API**        | RESTful API layer                    | Express.js                        |
-| **Engine**     | Order matching logic                 | Node.js                           |
-| **WebSocket**  | Live feed for order book      | Express + `ws`                    |
-| **Market Maker** | Simulates liquidity with fake orders | Express, Custom MM Logic         |
-| **Database**   | Stores orders, trades, market data   | TimescaleDB (PostgreSQL + time-series extensions) |
-
----
 ## 🚀 Getting Started Locally
 
 ### Prerequisites
